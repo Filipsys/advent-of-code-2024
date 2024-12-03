@@ -1,22 +1,20 @@
 import re
 
-
-data = open("./task1.input", "r").read().replace("\n", "")
-
-regex_list = re.findall("(mul\([0-9]{1,3},[0-9]{1,3}\))|(do\(\))|(don't\(\))", data)
-print(regex_list)
-
-temp = []
-for value in regex_list:
-  for tuple_value in value:
-    if tuple_value != "":
-      temp.append(tuple_value)
-print(temp)
+data = open("../day-3.input", "r").read().replace("\n", "")
+regex_list = re.findall(r"(mul\([0-9]{1,3},[0-9]{1,3}\))|(do\(\))|(don't\(\))", data)
 
 result = 0
+is_saving = True
 for regex in regex_list:
-  left, right = regex[4:][:-1].split(",")
-  
+  if regex[1] == "do()":
+    is_saving = True
+  elif regex[2] == "don't()":
+    is_saving = False
+
+  if not is_saving or regex[0] == "":
+    continue
+
+  left, right = regex[0][4:][:-1].split(",")
   result += int(left) * int(right)
 
 print(result)
