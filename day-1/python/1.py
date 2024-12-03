@@ -2,7 +2,7 @@ left_list = []
 right_list = []
 diff_sum = 0
 
-data = open("../input-1.txt", "r")
+data = open("../day-1.input", "r")
 
 for line in data:
     left, right = line.split()

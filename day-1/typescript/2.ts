@@ -2,7 +2,7 @@ let leftList = []
 let rightList = []
 let similaritySum = 0;
 
-const text = await Deno.readTextFile("input-1.txt").then((text: string) => text.toString())
+const text = await Deno.readTextFile("day-1.input").then((text: string) => text.toString())
 
 text.split("\n").forEach((line: string) => {
     const twoNumbers = line.split("   ");
