@@ -1,19 +1,11 @@
-data = """....#.....
-.........#
-..........
-..#.......
-.......#..
-..........
-.#..^.....
-........#.
-#.........
-......#..."""
+data = open("../day-6.input", "r").read()
 data = data.split("\n")
 row_length = len(data[0])
 column_length = len(data)
 
 guard_location = (0, 0) # x & y
 guard_direction = "N"
+guard_locations_visited = []
 
 movement_dict = {
   "N": (0, -1),
@@ -21,7 +13,6 @@ movement_dict = {
   "S": (0, 1),
   "W": (-1, 0)
 }
-
 direction_cursor_dict = {
   "N": "^",
   "E": ">",
@@ -29,17 +20,40 @@ direction_cursor_dict = {
   "W": "<"
 }
 
-def rotate_direction():
-  if guard_direction == "N":
-    guard_direction = "E"
-  elif guard_direction == "E":
-    guard_direction = "S"
-  elif guard_direction == "S":
-    guard_direction = "W"
-  elif guard_direction == "W":
-    guard_direction = "N"
+# Format data to be an array of arrays
+temp_list_data = []
+for element in data:
+  temp_list = []
+  for char in element:
+    temp_list.append(char)
   
-  data[guard_location[1]][guard_location[0]] = direction_cursor_dict[guard_direction]
+  temp_list_data.append(temp_list)
+data = temp_list_data
+
+def updateMap():
+  global data, guard_location
+  
+  data[guard_location[1]][guard_location[0]] = "."
+  data[guard_location[1] + movement_dict[guard_direction][1]][guard_location[0] + movement_dict[guard_direction][0]] = direction_cursor_dict[guard_direction]
+  guard_location = (guard_location[0] + movement_dict[guard_direction][0], guard_location[1] + movement_dict[guard_direction][1])
+  
+  if guard_location not in guard_locations_visited:
+    guard_locations_visited.append(guard_location)
+
+def rotate_direction():
+  global data, guard_direction
+  
+  if guard_direction == "N":
+   guard_direction = "E"
+  elif guard_direction == "E":
+   guard_direction = "S"
+  elif guard_direction == "S":
+   guard_direction = "W"
+  elif guard_direction == "W":
+   guard_direction = "N"
+  
+  x, y = guard_location
+  data[y][x] = direction_cursor_dict[guard_direction]
 
 def check_guard_direction(data_char):
   if data_char == "^":
@@ -53,25 +67,27 @@ def check_guard_direction(data_char):
   else:
     return ValueError
 
-def check_if_guard_path_blocked(x, y):
-  print("===")
-  print("Guard location: ", x, y)
-  print("North of guard: ", data[y - 1][x] )
-  print("East of guard: ", data[y][x + 1] )
-  print("South of guard: ", data[y + 1][x] )
-  print("West of guard: ", data[y][x - 1] )
+def displayMap():
+  temp_string = ""
   
-  if (data[y + movement_dict[guard_direction][1]][x] == "#" or
-      data[y][x + movement_dict[guard_direction][0]] == "#"):
-    print("Blocked")
-    rotate_direction()
-  else:
-    print("Clear, moving on")
+  for i in data:
+    for j in i:
+      temp_string += j
+    temp_string += "\n"
+  print(temp_string)
 
-def move_forward(guard_location):
-  x, y = guard_location
-  
-  check_if_guard_path_blocked(x, y)
+def check_if_guard_path_blocked(x, y):
+  new_y = y + movement_dict[guard_direction][1]
+  new_x = x + movement_dict[guard_direction][0]
+
+  if new_y < 0 or new_y >= column_length or new_x < 0 or new_x >= row_length:
+    print("Blocked: Out of bounds")
+  elif data[new_y][x] == "#" or data[y][new_x] == "#":
+    print("Blocked: Wall")
+    rotate_direction()
+
+def move_forward():
+  check_if_guard_path_blocked(guard_location[0], guard_location[1])
   
   if (guard_location[0] + movement_dict[guard_direction][0] < 0 or 
       guard_location[0] + movement_dict[guard_direction][0] > row_length):
@@ -81,28 +97,27 @@ def move_forward(guard_location):
       guard_location[1] + movement_dict[guard_direction][1] > column_length):
     raise IndexError
   
-  # print("Changing")
-  # print("Current location: ", x, y)
-  # print("Directions: ", movement_dict[guard_direction][0], movement_dict[guard_direction][1])
-  # print("New location: ", x + movement_dict[guard_direction][0], y + movement_dict[guard_direction][1])
-  return (x + movement_dict[guard_direction][0], y + movement_dict[guard_direction][1])
-
+  # displayMap()
+  updateMap()
+  
 # Find the guard initial location
 for data_line_index, data_line in enumerate(data):
   for data_char_index, data_char in enumerate(data_line):
     if data_char == "^":
-      guard_location = (data_char_index + 1, data_line_index + 1)
+      guard_location = (data_char_index, data_line_index)
       guard_direction = check_guard_direction(data_char)
-      print("Found guard")
-      print(guard_location, guard_direction)
       
-      check_if_guard_path_blocked(data_char_index + 1, data_line_index + 1)
+      check_if_guard_path_blocked(guard_location[0], guard_location[1])
 
 running = True
 while running:
   try:
-    guard_location = move_forward(guard_location)
+    move_forward()
     print("Guard location: ", guard_location)
   except IndexError:
     running = False
     print("Out of bounds")
+    print("Guard direction: ", guard_direction)
+    print("Guard location: ", guard_location)
+
+print("Sum of unique places visited: ", len(guard_locations_visited) + 1) # Counting the exit spot

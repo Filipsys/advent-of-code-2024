@@ -1399,6 +1399,7 @@ is_failing = True
 times_looped = 0 # Debugging purposes
 while is_failing:
     is_failing = False
+    print("While loop")
 
     for number in numbers_list:
         left, right = number.split("|")
@@ -1411,6 +1412,8 @@ while is_failing:
 
             sorted_list.pop(left_index)
             sorted_list.insert(int(left_index) - 1, int(left))
+        else:
+            continue
 
     times_looped += 1
 print("Times looped: ", times_looped)
