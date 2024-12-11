@@ -1,13 +1,4 @@
-data = """T.........
-...T......
-.T........
-..........
-..........
-..........
-..........
-..........
-..........
-.........."""
+data = open("../day-8.input", "r").read()
 data = data.split("\n")
 
 possible_antenas = list("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
@@ -49,11 +40,18 @@ for index_antenna, antenna in enumerate(antennas_positions):
           antinodes_positions.add((new_x, new_y))
         
           data[new_y][new_x] = "#"
-          new_x = new_x - dist_x
-          new_y = new_y - dist_y
-    
+        new_x = new_x - dist_x
+        new_y = new_y - dist_y
+
+# Print the output (optional)
 for line in data:
   print("".join(line))
 
 # Count the antinodes
-print("Antinodes amount: ", len(antinodes_positions) + len(antennas_positions))
+total_positions = set()
+for antinode in antinodes_positions:
+  total_positions.add(antinode)
+for antenna in antennas_positions:
+  total_positions.add(antenna[:-1])
+
+print("Antinodes amount: ", len(total_positions))
