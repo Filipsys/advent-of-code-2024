@@ -12,3 +12,6 @@
 | [Day 7](https://github.com/Filipsys/advent-of-code-2024/tree/main/day-7) | - | [Problem](https://adventofcode.com/2024/day/7) |
 | [Day 8](https://github.com/Filipsys/advent-of-code-2024/tree/main/day-8) | ⭐️ ⭐️ | [Problem](https://adventofcode.com/2024/day/8) |
 | [Day 9](https://github.com/Filipsys/advent-of-code-2024/tree/main/day-9) | ⭐️ | [Problem](https://adventofcode.com/2024/day/9) |
+| Day 10 | - | [Problem](https://adventofcode.com/2024/day/10) |
+| [Day 11](https://github.com/Filipsys/advent-of-code-2024/tree/main/day-11) | - | [Problem](https://adventofcode.com/2024/day/11) |
+| Day 12 | - | [Problem](https://adventofcode.com/2024/day/12) |
