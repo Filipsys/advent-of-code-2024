@@ -1,34 +1,33 @@
-data = "0 1 1000 99 999"
+data = "1117 0 8 21078 2389032 142881 93 385"
+data = data.split(" ")
 blink_amount = 25
 current_blinks = 0
-# data = data.split("\n")
-data = data.split(" ")
 
-# while current_blinks <= 25:
-new_data = data.copy()
+while current_blinks < blink_amount:
+    new_data = data.copy()
 
-additional_elements = 1
-for index, number in enumerate(data):
-    if int(number) == 0:
-        new_data[index] = 1
+    additional_elements = 0
+    for index, number in enumerate(data):
+        if int(number) == 0:
+            new_data[index + additional_elements] = 1
 
-    # Make 1000 -> 10 & 0
-    elif len(str(number)) % 2 == 0:
-        middle = len(number) / 2
-        left, right = str(number[:int(middle)]), str(number[int(middle):])
-
-        new_data.pop(index)
-        new_data.insert(index, left)
-        new_data.insert(index + additional_elements, right)
-        additional_elements += 1
-    else:
-        new_data[index] = int(number) * 2024
+        elif len(str(number)) % 2 == 0:
+            middle = len(str(number)) / 2
+            left, right = str(number)[:int(middle)], str(number)[int(middle):]
+            insert_elements = [int(left), int(right)]
+            
+            new_data[index + additional_elements:index + 1 + additional_elements] = insert_elements
+            additional_elements += 1
+        else:
+            new_data[index + additional_elements] = int(number) * 2024
     
-print(new_data)
-# data = new_data
-
+    data = new_data
+    current_blinks += 1
+    
 temp = ""
-for element in new_data:
+for element in data:
     temp += str(element) + " "
 
 print(temp)
+print("---")
+print(len(data))
